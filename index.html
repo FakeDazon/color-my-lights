@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<!--[if IE 8]>
+<html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en"> <!--<![endif]-->
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <meta name="description"
+        content="Try HiveMQ MQTT browser client – a websocket client that you can use to experiment with publishing and subscribing MQTT messages over port 8000">
+    <title>MQTT Websocket Client</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="connected">
+    <main id="swatches"></main>
+
+    <script>
+        function sendHexToAll(h) {
+            websocketclient.publish("dazon/all/col", h, 0, false)
+        }
+        function turnOnAll() {
+            websocketclient.publish("dazon/all", "ON", 0, false)
+
+        }
+        function turnOffAll() {
+            websocketclient.publish("dazon/all", "OFF", 0, false)
+        }
+        function toggleAll() {
+            websocketclient.publish("dazon/all", "T", 0, false)
+        }
+
+        var colors = [
+            "#050914",
+            "#110524",
+            "#3b063a",
+            "#691749",
+            "#9c3247",
+            "#d46453",
+            "#f5a15d",
+            "#ffcf8e",
+            "#ff7a7d",
+            "#ff417d",
+            "#d61a88",
+            "#94007a",
+            "#42004e",
+            "#220029",
+            "#100726",
+            "#25082c",
+            "#3d1132",
+            "#73263d",
+            "#bd4035",
+            "#ed7b39",
+            "#ffb84a",
+            "#fff540",
+            "#c6d831",
+            "#77b02a",
+            "#429058",
+            "#2c645e",
+            "#153c4a",
+            "#052137",
+            "#0e0421",
+            "#0c0b42",
+            "#032769",
+            "#144491",
+            "#488bd4",
+            "#78d7ff",
+            "#b0fff1",
+            "#faffff",
+            "#c7d4e1",
+            "#928fb8",
+            "#5b537d",
+            "#392946",
+            "#24142c",
+            "#0e0f2c",
+            "#132243",
+            "#1a466b",
+            "#10908e",
+            "#28c074",
+            "#3dff6e",
+            "#f8ffb8",
+            "#f0c297",
+            "#cf968c",
+            "#8f5765",
+            "#52294b",
+            "#0f022e",
+            "#35003b",
+            "#64004c",
+            "#9b0e3e",
+            "#d41e3c",
+            "#ed4c40",
+            "#ff9757",
+            "#d4662f",
+            "#9c341a",
+            "#691b22",
+            "#450c28",
+            "#2d002e",
+        ];
+
+        function populateSwatches() {
+            document.getElementById("swatches").innerHTML = "";
+            colors.forEach(e => {
+                var swatch = document.createElement("div");
+                swatch.className = "swatch";
+                swatch.style.backgroundColor = e;
+                swatch.onclick = function () {
+                    sendHexToAll(e);
+                }
+                document.getElementById("swatches").appendChild(swatch);
+            })
+        }
+        populateSwatches()
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/1.3.1/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/4.2.3/js/foundation.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/foundation/4.2.3/js/foundation/foundation.forms.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.1.0/moment.min.js"></script>
+    <script src="js/jquery.minicolors.min.js"></script>
+    <script src="js/mqttws31.js"></script>
+    <script src="js/encoder.js"></script>
+    <script src="js/app.js"></script>
+
+    <script>
+
+        function randomString(length) {
+            var text = "";
+            var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            for (var i = 0; i < length; i++)
+                text += possible.charAt(Math.floor(Math.random() * possible.length));
+            return text;
+        }
+
+        $(document).foundation();
+        $(document).ready(function () {
+
+            $('#clientIdInput').val('clientId-' + randomString(10));
+
+            $('#colorChooser').minicolors();
+
+            $("#addSubButton").fancybox({
+                'afterShow': function () {
+                    var rndColor = websocketclient.getRandomColor();
+                    $("#colorChooser").minicolors('value', rndColor);
+                }
+            });
+
+            websocketclient.render.toggle('publish');
+            websocketclient.render.toggle('messages');
+            websocketclient.render.toggle('sub');
+        });
+    </script>
+</body>
+
+</html>

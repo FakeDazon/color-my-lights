@@ -1,0 +1,23 @@
+.swatch {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    border-radius: 5px;
+    box-shadow: 0 7px 10px rgba(0, 0, 0, 0.2);
+    border: none;
+    outline: none;
+}
+
+main {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 800px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+body {
+    background: black;
+}
